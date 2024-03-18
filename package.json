@@ -1,0 +1,35 @@
+{
+  "name": "belle-nippe-api",
+  "version": "1.0.0",
+  "description": "Back-end Ecommerce",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jessygomes/Belle-Nippe-API.git"
+  },
+  "author": "CJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jessygomes/Belle-Nippe-API/issues"
+  },
+  "homepage": "https://github.com/jessygomes/Belle-Nippe-API#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "email-validator": "^2.0.4",
+    "express": "^4.18.3",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.0",
+    "password-validator": "^5.3.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.1"
+  }
+}
