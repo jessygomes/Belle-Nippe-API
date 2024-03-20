@@ -22,14 +22,16 @@ const authController = {
         return res.status(401).json("Mot de passe incorrect / Email Incorrect");
       }
       const token = jwt.sign({ id: user.id }, process.env.SECRET, {
-        expiresIn: "24h",
+        expiresIn: "2h",
       });
       res.status(200).json({
         token,
-        is_looged: true,
+        id: user.id,
+        is_logged: true,
         nom: user.nom,
         prenom: user.prenom,
         email: user.email,
+        role: user.role,
       });
     } catch (error) {
       console.trace(error);
@@ -40,6 +42,7 @@ const authController = {
   register: async (req, res) => {
     try {
       const { nom, prenom, email, password } = req.body;
+      console.log(req.body);
       if (!email || !password || !nom || !prenom) {
         return res.status(400).json("Veuillez remplir tous les champs");
       }
@@ -59,9 +62,18 @@ const authController = {
       }
       const hash = bcrypt.hashSync(password, 10);
 
-      const newUser = await User.create({ email, password: hash });
+      const newUser = await User.create({ nom, prenom, email, password: hash });
 
-      res.status(201).json(newUser);
+      const token = jwt.sign({ id: newUser.id }, process.env.SECRET, {
+        expiresIn: "24h",
+      });
+
+      newUser.is_logged = true;
+
+      res.status(201).json({
+        user: newUser,
+        token,
+      });
     } catch (error) {
       console.trace(error);
       res.status(500).json(error.toString());

@@ -31,7 +31,7 @@ const orderUserController = {
         include: "order_detail",
       });
       if (orderUser) {
-        res.status(200).json(orderUser.order_detail);
+        res.status(200).json(orderUser);
       } else {
         res.status(404).json("Commande non trouvée");
       }

@@ -14,15 +14,18 @@ const itemController = {
     }
   },
 
-  getItemOfCollection: async (req, res) => {
+  getItemsOfCollection: async (req, res) => {
     try {
-      const item = await Item.findByPk(req.params.id, {
-        include: "collections",
+      const items = await Item.findAll({
+        include: {
+          model: Collection,
+          where: { id: req.params.id },
+        },
       });
-      if (item) {
-        res.status(200).json(item.collections);
+      if (items && items.length > 0) {
+        res.status(200).json(items);
       } else {
-        res.status(404).json("Item non trouvé");
+        res.status(404).json("Aucun item trouvé pour cette collection");
       }
     } catch (error) {
       console.trace(error);

@@ -7,12 +7,19 @@ const cartController = require("./controllers/cartController");
 const cartItemController = require("./controllers/cartItemController");
 const orderUserController = require("./controllers/orderUserController");
 const orderDetailController = require("./controllers/orderDetailController");
+const authController = require("./controllers/authController");
 const upload = require("./middlewares/multerMiddleware");
+const jwtMiddleware = require("./middlewares/jwtMiddleware");
+const isAdmin = require("./middlewares/isAdmin");
 
 const router = express.Router();
 
+//! AUTH ROUTES
+router.post("/login", authController.login);
+router.post("/register", authController.register);
+
 //! USERS ROUTES
-router.get("/users", userController.getAllUsers);
+router.get("/users", isAdmin, userController.getAllUsers);
 router.get("/users/:id", userController.getOneUser);
 router.post("/users", userController.createUser);
 router.patch("/users/:id", userController.updateUser);
@@ -22,34 +29,54 @@ router.delete("/users/:id", userController.deleteUser);
 router.get("/categories", categoryController.getAllCategories);
 router.get("/categories/:id", categoryController.getOneCategory);
 router.get("/categories/:id/items", categoryController.getItemsOfCategory);
-router.post("/categories", categoryController.createCategory);
-router.delete("/categories/:id", categoryController.deleteCategory);
+router.post("/categories", isAdmin, categoryController.createCategory);
+router.delete("/categories/:id", isAdmin, categoryController.deleteCategory);
 
 //! COLLECTIONS ROUTES
 router.get("/collections", collectionController.getAllCollections);
 router.get("/collections/:id", collectionController.getOneCollection);
 router.get("/collections/:id/items", collectionController.getItemOfCollection);
-router.post("/collections", collectionController.createCollection);
-router.patch("/collections/:id", collectionController.updateCollection);
-router.delete("/collections/:id", collectionController.deleteCollection);
+router.post("/collections", isAdmin, collectionController.createCollection);
+router.patch(
+  "/collections/:id",
+  isAdmin,
+  collectionController.updateCollection
+);
+router.delete(
+  "/collections/:id",
+  isAdmin,
+  collectionController.deleteCollection
+);
 
 //! ITEMS ROUTES
 router.get("/items", itemController.getAllItems);
 router.get("/items/:id", itemController.getOneItem);
-router.get("/items/:id/collections", itemController.getItemOfCollection);
+router.get("/collections/:id/items", itemController.getItemsOfCollection);
 router.get("/items/:id/categories", itemController.getItemOfCategory);
-router.post("/items", upload.array("images"), itemController.createItem);
-router.patch("/items/:id", upload.array("images"), itemController.updateItem);
-router.delete("/items/:id", itemController.deleteItem);
+router.post(
+  "/items",
+  isAdmin,
+  upload.array("images"),
+  itemController.createItem
+);
+router.patch(
+  "/items/:id",
+  isAdmin,
+  upload.array("images"),
+  itemController.updateItem
+);
+router.delete("/items/:id", isAdmin, itemController.deleteItem);
 //! ITEM IMAGES ROUTES
 router.get("/items/:itemId/images", itemController.getImagesOfItem);
 router.post(
   "/items/:itemId/images",
+  isAdmin,
   upload.single("image"),
   itemController.addImageToItem
 );
 router.delete(
   "/items/:itemId/images/:imageId",
+  isAdmin,
   itemController.deleteImageOfItem
 );
 
@@ -76,7 +103,7 @@ router.get(
   orderUserController.getOneOrderUserWithOrderDetail
 );
 router.post("/orders", orderUserController.createOrderUser);
-router.patch("/orders/:id", orderUserController.updateOrderUser);
+router.patch("/orders/:id", isAdmin, orderUserController.updateOrderUser);
 router.delete("/orders/:id", orderUserController.deleteOrderUser);
 
 //! ORDER_DETAIL ROUTES
