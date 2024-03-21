@@ -24,6 +24,7 @@ const authController = {
       const token = jwt.sign({ id: user.id }, process.env.SECRET, {
         expiresIn: "2h",
       });
+      res.cookie("token", token, { httpOnly: true });
       res.status(200).json({
         token,
         id: user.id,
@@ -53,7 +54,7 @@ const authController = {
         return res
           .status(400)
           .json(
-            "Le mot de passe doit contenir au moins Une Majuscule, un chiffre et un caractère spécial et doit faire au moins 8 caractères."
+            "Le mot de passe doit contenir au moins Une Majuscule, un chiffre, un caractère spécial et doit faire au moins 8 caractères."
           );
       }
       const user = await User.findOne({ where: { email } });
@@ -65,14 +66,17 @@ const authController = {
       const newUser = await User.create({ nom, prenom, email, password: hash });
 
       const token = jwt.sign({ id: newUser.id }, process.env.SECRET, {
-        expiresIn: "24h",
+        expiresIn: "2h",
       });
 
       newUser.is_logged = true;
 
+      res.cookie("token", token, { httpOnly: true });
+
       res.status(201).json({
         user: newUser,
         token,
+        message: "Valide",
       });
     } catch (error) {
       console.trace(error);

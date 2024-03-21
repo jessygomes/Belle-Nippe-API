@@ -33,7 +33,7 @@ Cart.belongsTo(User, {
 //! Order_User & Order_Detail
 Order_User.hasMany(Order_Detail, {
   foreignKey: "order_id",
-  as: "order_detail",
+  as: "order_details",
 });
 
 Order_Detail.belongsTo(Order_User, {

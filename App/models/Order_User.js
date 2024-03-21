@@ -6,7 +6,7 @@ class Order_User extends Model {}
 Order_User.init(
   {
     total: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
     status: {

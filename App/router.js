@@ -19,7 +19,7 @@ router.post("/login", authController.login);
 router.post("/register", authController.register);
 
 //! USERS ROUTES
-router.get("/users", isAdmin, userController.getAllUsers);
+router.get("/users", userController.getAllUsers);
 router.get("/users/:id", userController.getOneUser);
 router.post("/users", userController.createUser);
 router.patch("/users/:id", userController.updateUser);
@@ -53,30 +53,18 @@ router.get("/items", itemController.getAllItems);
 router.get("/items/:id", itemController.getOneItem);
 router.get("/collections/:id/items", itemController.getItemsOfCollection);
 router.get("/items/:id/categories", itemController.getItemOfCategory);
-router.post(
-  "/items",
-  isAdmin,
-  upload.array("images"),
-  itemController.createItem
-);
-router.patch(
-  "/items/:id",
-  isAdmin,
-  upload.array("images"),
-  itemController.updateItem
-);
+router.post("/items", upload.array("images"), itemController.createItem);
+router.patch("/items/:id", upload.array("images"), itemController.updateItem);
 router.delete("/items/:id", isAdmin, itemController.deleteItem);
 //! ITEM IMAGES ROUTES
 router.get("/items/:itemId/images", itemController.getImagesOfItem);
 router.post(
   "/items/:itemId/images",
-  isAdmin,
   upload.single("image"),
   itemController.addImageToItem
 );
 router.delete(
   "/items/:itemId/images/:imageId",
-  isAdmin,
   itemController.deleteImageOfItem
 );
 
@@ -98,12 +86,14 @@ router.delete("/cart_items/:id", cartItemController.deleteCartItem);
 //! ORDER_USER ROUTES
 router.get("/orders", orderUserController.getAllOrderUsers);
 router.get("/orders/:id", orderUserController.getOneOrderUser);
+router.get("/users/:id/orders", orderUserController.getOrdersAndDetailsOfUser);
 router.get(
   "/orders/:id/order_details",
   orderUserController.getOneOrderUserWithOrderDetail
 );
+router.get("/ordersAndDetails", orderUserController.getAllOrdersWithDetails);
 router.post("/orders", orderUserController.createOrderUser);
-router.patch("/orders/:id", isAdmin, orderUserController.updateOrderUser);
+router.patch("/orders/:id", orderUserController.updateOrderUser);
 router.delete("/orders/:id", orderUserController.deleteOrderUser);
 
 //! ORDER_DETAIL ROUTES
