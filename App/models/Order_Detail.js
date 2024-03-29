@@ -5,6 +5,10 @@ class Order_Detail extends Model {}
 
 Order_Detail.init(
   {
+    item_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,

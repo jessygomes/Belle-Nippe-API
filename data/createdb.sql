@@ -101,6 +101,7 @@ CREATE TABLE "order_detail" (
   "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "order_id" INTEGER NOT NULL,
   "item_id" INTEGER NOT NULL,
+  "item_name" VARCHAR(255) NOT NULL,
   "quantity" INTEGER NOT NULL,
   "price" DECIMAL(10, 2) NOT NULL,
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -108,6 +109,5 @@ CREATE TABLE "order_detail" (
   FOREIGN KEY ("order_id") REFERENCES "order_user" ("id") ON DELETE CASCADE,
   FOREIGN KEY ("item_id") REFERENCES "item" ("id") ON DELETE CASCADE
 );
-
 
 COMMIT;

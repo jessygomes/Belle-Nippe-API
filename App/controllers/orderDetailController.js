@@ -27,10 +27,11 @@ const orderDetailController = {
 
   createOrderDetail: async (req, res) => {
     try {
-      const { order_id, item_id, quantity, price } = req.body;
+      const { order_id, item_id, item_name, quantity, price } = req.body;
       const orderDetail = await Order_Detail.create({
         order_id,
         item_id,
+        item_name,
         quantity,
         price,
       });
@@ -45,9 +46,10 @@ const orderDetailController = {
     try {
       const orderDetail = await Order_Detail.findByPk(req.params.id);
       if (orderDetail) {
-        const { order_id, item_id, quantity, price } = req.body;
+        const { order_id, item_id, item_name, quantity, price } = req.body;
         orderDetail.order_id = order_id;
         orderDetail.item_id = item_id;
+        orderDetail.item_name = item_name;
         orderDetail.quantity = quantity;
         orderDetail.price = price;
         await orderDetail.save();

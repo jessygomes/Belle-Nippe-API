@@ -29,22 +29,39 @@ router.delete("/users/:id", userController.deleteUser);
 router.get("/categories", categoryController.getAllCategories);
 router.get("/categories/:id", categoryController.getOneCategory);
 router.get("/categories/:id/items", categoryController.getItemsOfCategory);
-router.post("/categories", isAdmin, categoryController.createCategory);
-router.delete("/categories/:id", isAdmin, categoryController.deleteCategory);
+router.post(
+  "/categories",
+  isAdmin,
+  jwtMiddleware,
+  categoryController.createCategory
+);
+router.delete(
+  "/categories/:id",
+  isAdmin,
+  jwtMiddleware,
+  categoryController.deleteCategory
+);
 
 //! COLLECTIONS ROUTES
 router.get("/collections", collectionController.getAllCollections);
 router.get("/collections/:id", collectionController.getOneCollection);
 router.get("/collections/:id/items", collectionController.getItemOfCollection);
-router.post("/collections", isAdmin, collectionController.createCollection);
+router.post(
+  "/collections",
+  isAdmin,
+  jwtMiddleware,
+  collectionController.createCollection
+);
 router.patch(
   "/collections/:id",
   isAdmin,
+  jwtMiddleware,
   collectionController.updateCollection
 );
 router.delete(
   "/collections/:id",
   isAdmin,
+  jwtMiddleware,
   collectionController.deleteCollection
 );
 
@@ -53,9 +70,22 @@ router.get("/items", itemController.getAllItems);
 router.get("/items/:id", itemController.getOneItem);
 router.get("/collections/:id/items", itemController.getItemsOfCollection);
 router.get("/items/:id/categories", itemController.getItemOfCategory);
-router.post("/items", upload.array("images"), itemController.createItem);
-router.patch("/items/:id", upload.array("images"), itemController.updateItem);
-router.delete("/items/:id", isAdmin, itemController.deleteItem);
+router.post(
+  "/items",
+  isAdmin,
+  jwtMiddleware,
+  upload.array("images"),
+  itemController.createItem
+);
+router.patch(
+  "/items/:id",
+  isAdmin,
+  jwtMiddleware,
+  upload.array("images"),
+  itemController.updateItem
+);
+router.delete("/items/:id", isAdmin, jwtMiddleware, itemController.deleteItem);
+
 //! ITEM IMAGES ROUTES
 router.get("/items/:itemId/images", itemController.getImagesOfItem);
 router.post(
@@ -93,14 +123,34 @@ router.get(
 );
 router.get("/ordersAndDetails", orderUserController.getAllOrdersWithDetails);
 router.post("/orders", orderUserController.createOrderUser);
-router.patch("/orders/:id", orderUserController.updateOrderUser);
-router.delete("/orders/:id", orderUserController.deleteOrderUser);
+router.patch(
+  "/orders/:id",
+  isAdmin,
+  jwtMiddleware,
+  orderUserController.updateOrderUser
+);
+router.delete(
+  "/orders/:id",
+  isAdmin,
+  jwtMiddleware,
+  orderUserController.deleteOrderUser
+);
 
 //! ORDER_DETAIL ROUTES
 router.get("/order_details", orderDetailController.getAllOrderDetails);
 router.get("/order_details/:id", orderDetailController.getOneOrderDetail);
 router.post("/order_details", orderDetailController.createOrderDetail);
-router.patch("/order_details/:id", orderDetailController.updateOrderDetail);
-router.delete("/order_details/:id", orderDetailController.deleteOrderDetail);
+router.patch(
+  "/order_details/:id",
+  isAdmin,
+  jwtMiddleware,
+  orderDetailController.updateOrderDetail
+);
+router.delete(
+  "/order_details/:id",
+  isAdmin,
+  jwtMiddleware,
+  orderDetailController.deleteOrderDetail
+);
 
 module.exports = router;

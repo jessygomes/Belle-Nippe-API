@@ -46,9 +46,9 @@ const userController = {
   updateUser: async (req, res) => {
     try {
       const user = await User.findByPk(req.params.id);
-      const { nom, prenom } = req.body;
+      const { nom, prenom, role } = req.body;
       if (user) {
-        await user.update({ nom, prenom });
+        await user.update({ nom, prenom, role });
         res.status(200).json(user);
       } else {
         res.status(404).json("Utilisateur non trouvé");
