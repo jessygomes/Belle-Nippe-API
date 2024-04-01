@@ -1,5 +1,7 @@
 const { Item } = require("../models");
 const { Image } = require("../models");
+const fs = require("fs");
+const path = require("path");
 
 const itemController = {
   getAllItems: async (req, res) => {
@@ -66,6 +68,7 @@ const itemController = {
   },
 
   createItem: async (req, res) => {
+    console.log(req.files);
     try {
       const {
         title,
@@ -91,9 +94,13 @@ const itemController = {
         category_id,
         is_active,
       });
+      console.log(req.files);
       if (req.files) {
         for (let i = 0; i < req.files.length; i++) {
-          const image = await Image.create({ url: req.files[i].path });
+          const image = await Image.create({
+            url: req.files[i].filename,
+            name_image: req.files[i].originalname,
+          });
           await item.addImage(image); // Associer l'image à l'item
         }
       }
@@ -176,6 +183,17 @@ const itemController = {
       if (item) {
         const images = await item.getImages();
         for (let i = 0; i < images.length; i++) {
+          // fs.unlinkSync(
+          //   path.join(
+          //     __dirname,
+          //     "..",
+          //     "..",
+          //     "App",
+          //     "uploads",
+          //     "ArticleImg",
+          //     images[i].url
+          //   )
+          // );
           await images[i].destroy();
         }
         await item.destroy();
