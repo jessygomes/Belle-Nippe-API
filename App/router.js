@@ -17,6 +17,9 @@ const router = express.Router();
 //! AUTH ROUTES
 router.post("/login", authController.login);
 router.post("/register", authController.register);
+router.post("/request-reset", authController.resetPasswordRequest);
+router.post("/validate-reset", authController.verifyResetCode);
+router.post("/reset-password", authController.resetPassword);
 
 //! USERS ROUTES
 router.get("/users", userController.getAllUsers);

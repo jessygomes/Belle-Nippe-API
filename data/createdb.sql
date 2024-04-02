@@ -10,6 +10,7 @@ CREATE TABLE "user" (
   "password" VARCHAR(255) NOT NULL,
   "role" VARCHAR(255) DEFAULT 'user',
   "is_logged" BOOLEAN DEFAULT FALSE,
+  "reset_code" INTEGER
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

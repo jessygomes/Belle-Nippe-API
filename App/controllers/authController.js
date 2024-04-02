@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const emailValidator = require("email-validator");
 const schema = require("../models/PasswordPolicy");
+const nodemailer = require("nodemailer");
 const { User } = require("../models");
 
 const authController = {
@@ -78,6 +79,82 @@ const authController = {
         token,
         message: "Valide",
       });
+    } catch (error) {
+      console.trace(error);
+      res.status(500).json(error.toString());
+    }
+  },
+
+  //! REINITIALISATION DE MOT DE PASSE
+  resetPasswordRequest: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(404).json("User Introuvable");
+      }
+      const resetCode = Math.floor(100000 + Math.random() * 900000); //! CODE A 6 CHIFFRES
+      user.resetCode = resetCode;
+      await user.save();
+
+      //! ENVOI DU CODE PAR MAIL
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.PASSWORD,
+        },
+      });
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: user.email,
+        subject: "Réinitialisation de votre mot de passe",
+        text: `Votre code de réinitialisation est : ${resetCode}`,
+      };
+      await transporter.sendMail(mailOptions);
+
+      res
+        .status(200)
+        .json(
+          "Un code de réinitialisation a été envoyé à votre adresse e-mail."
+        );
+    } catch (error) {
+      console.trace(error);
+      res.status(500).json(error.toString());
+    }
+  },
+
+  verifyResetCode: async (req, res) => {
+    try {
+      const { email, resetCode } = req.body;
+      const user = await User.findOne({ where: { email } });
+      if (!user || user.resetCode !== resetCode) {
+        return res.status(400).json("Code de réinitialisation incorrect.");
+      }
+      res
+        .status(200)
+        .json(
+          "Code de réinitialisation vérifié. Vous pouvez maintenant réinitialiser votre mot de passe."
+        );
+    } catch (error) {
+      console.trace(error);
+      res.status(500).json(error.toString());
+    }
+  },
+
+  resetPassword: async (req, res) => {
+    try {
+      const { email, resetCode, newPassword } = req.body;
+      const user = await User.findOne({ where: { email } });
+      if (!user || user.resetCode !== resetCode) {
+        return res.status(400).json("Code de réinitialisation incorrect.");
+      }
+      user.password = bcrypt.hashSync(newPassword, 10);
+      user.resetCode = null;
+      await user.save();
+      res
+        .status(200)
+        .json("Votre mot de passe a été réinitialisé avec succès.");
     } catch (error) {
       console.trace(error);
       res.status(500).json(error.toString());
