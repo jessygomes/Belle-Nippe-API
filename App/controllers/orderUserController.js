@@ -92,9 +92,21 @@ const orderUserController = {
 
   createOrderUser: async (req, res) => {
     try {
-      const { user_id, total, status } = req.body;
+      const {
+        user_id,
+        total,
+        firstname_client,
+        lastname_client,
+        email_client,
+        adress_client,
+        status,
+      } = req.body;
       const orderUser = await Order_User.create({
         user_id,
+        firstname_client,
+        lastname_client,
+        email_client,
+        adress_client,
         total,
         status,
       });

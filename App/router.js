@@ -34,8 +34,7 @@ router.get("/categories/:id", categoryController.getOneCategory);
 router.get("/categories/:id/items", categoryController.getItemsOfCategory);
 router.post(
   "/categories",
-  isAdmin,
-  jwtMiddleware,
+
   categoryController.createCategory
 );
 router.delete(

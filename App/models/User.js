@@ -32,10 +32,10 @@ User.init(
       allowNull: false,
       defaultValue: false,
     },
-    // reset_code: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    // },
+    reset_code: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     sequelize,

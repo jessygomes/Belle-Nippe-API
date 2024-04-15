@@ -10,7 +10,7 @@ CREATE TABLE "user" (
   "password" VARCHAR(255) NOT NULL,
   "role" VARCHAR(255) DEFAULT 'user',
   "is_logged" BOOLEAN DEFAULT FALSE,
-  "reset_code" INTEGER
+  "reset_code" INTEGER,
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,6 +91,10 @@ CREATE TABLE "cart_item" (
 CREATE TABLE "order_user" (
   "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "user_id" INTEGER NOT NULL,
+  "firstname_client" VARCHAR(255) NOT NULL,
+  "lastname_client" VARCHAR(255) NOT NULL,
+  "email_client" VARCHAR(255) NOT NULL,
+  "adress_client" VARCHAR(255),
   "total" DECIMAL(10, 2) NOT NULL,
   "status" VARCHAR(20) DEFAULT 'en attente',
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
